@@ -1,0 +1,88 @@
+
+input {
+    -webkit-appearance: textfield;
+    background-color: white;
+    -webkit-rtl-ordering: logical;
+    user-select: text;
+    cursor: auto;
+    padding: 2px;
+    border-width: 4px;
+    border-style: solid;
+    border-color: lightblue;
+    border-image: initial;
+}
+
+.inputID {
+	border-color:lightgreen;
+}
+
+form {
+ display: block;
+}
+
+#name {
+	letter-spacing: 3px;
+	font-family: Serif;
+	font-style: bold;
+}
+
+#submitID {
+    background-color: Green; /* Green */
+    border: none;
+    color: white;
+    padding: 2px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: none;
+}
+
+#submitTweet {
+    background-color: #1da1f2; 
+    border: none;
+    color: white;
+    padding: 2px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+#refresh{
+    background-color: #ff4d4d; 
+    border: none;
+    color: white;
+    padding: 2px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: none;
+    margin-left: 25px;
+}
+
+span {
+    font-family: sans-serif;
+    font-stretch: expanded;
+    font-weight: bold;
+    color: #65e765;
+    font-size: 25px;
+}
+
+#first {
+    font-family: sans-serif;
+    font-weight: bold;
+    font-stretch: expanded;
+    color: #76bdd5;
+    
+}
+
+#time {
+    color:  #b3b3b3;
+    font-size: 13px;
+}
+
+
+

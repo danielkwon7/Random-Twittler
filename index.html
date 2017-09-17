@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jquery.js"></script>
+    <script src="data_generator.js"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+  </head>
+  <body>
+    <script>
+
+      $(document).ready(function(){
+        var $head = $('head');
+        var $body = $('body');
+        $body.html('');
+        var $image = $('<img src="https://abs.twimg.com/icons/apple-touch-icon-192x192.png"></img>');
+        $image.appendTo($body);
+        var $inputID = $('<form id="id"><input type="text" class="inputID" placeholder="What is your name?"> <input id="submitID" type="submit" value="Sign In"></form><br>')
+        var $inputTweet = $('<form id="tweet"><input type="text" class="inputTweet" placeholder="A blue bird drinks blue bottle coffee."> <input id="submitTweet" type="submit" value="Tweeet"></form>');
+        var $refreshButton = $('<br><button id="refresh" type="button">Refresh</button><br><br>')
+        window.visitor=undefined;
+        $inputID.appendTo($body);
+        $('#id').on('submit', function() {
+          var text = $('.inputID').val();
+          window.visitor = text;
+          $intro = $('<div class="intro"></div>');
+          $span = $('<span id="first"></span>');
+          $rspan = $('<span id="rest"></span><br>')
+          var firstLetter = window.visitor[0];
+          var restLetter = window.visitor.slice(1) + '. ';
+          $span.text(firstLetter);
+          $rspan.text(restLetter);
+          $intro.html('Welcome ');
+          $span.appendTo($intro);
+          $rspan.appendTo($intro);
+          $intro.append(''+ randomElement(compliments));
+          $(this).html($intro);
+          // ($random).prepend($inputTweet);
+          // ($random).prepend($intro);
+          return false;
+        });
+        $inputTweet.appendTo($body);
+        $refreshButton.appendTo($body);
+
+
+        $('#tweet').on('submit', function() {
+          if (!visitor) {
+            alert('Sign in first!');
+            return false;
+          };
+          var text = $('.inputTweet').val();
+          var $sweet = $('<div></div>');
+          $sweet.text(text);
+          writeTweet(text);
+          $('#random').remove();
+          update();
+          // $('#random').prepend($sweet);
+          // $sweet.appendTo($body);
+          return false;
+        });
+
+        function makeWords(time, word) {
+          if (time > 1) {
+            return time + ' ' + word + 's';
+          } else if (time === 1) {
+            return time + ' ' + word;
+          } else {
+            if (word != 'second') {
+              return '';
+            } else {
+              return ' Just now'
+            }
+          }
+        }
+
+        function update(callback) {
+          var master;
+          if (callback) {
+            master = callback;
+          } else {
+            master = streams.home;
+          }
+          var index = master.length - 1;
+          $random = $('<div id="random"></div>');
+          $random.html('');
+          while(index >= 0){
+            var tweet = master[index];
+            var $tweet = $('<div class="random" data-user=' + tweet.user + '></div>');
+            var $time = $('<span id="time"></span>')
+            var time_passed = Math.floor((new Date() - tweet.created_at)/1000);
+            var seconds = time_passed % 60;
+            var minutes = Math.floor((time_passed / 60)) % 60;
+            var hours = Math.floor((minutes / 3600)) % 24;
+            var days = Math.floor((hours / 24));
+            var seconds_w = makeWords(seconds, 'second');
+            var minutes_w = makeWords(minutes, 'minute');
+            var hours_w = makeWords(hours, 'hour');
+            var days_w = makeWords(days, 'day');
+            var array = [days_w, hours_w, minutes_w, seconds_w];
+            if (array.slice(3).join('') !== '') {
+              if (seconds_w === ' Just now') {
+                array = array.slice(3);
+              };
+            };
+            if (array.join('') !== ' Just now') {
+              array.push('ago')
+            }
+            var time_passed_w = array.join(' ');
+            $time.text(time_passed_w);
+            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            $tweet.append($time);
+            $tweet.appendTo($random);
+            index -= 1;
+          }
+          $random.appendTo($body);
+          listener();
+          return false;
+        }
+        // var index = streams.home.length - 1;
+        // $random = $('<div id="random"></div>');
+        // $random.html('');
+        // while(index >= 0){
+        //   var tweet = streams.home[index];
+        //   var $tweet = $('<div class="random"></div>');
+        //   $tweet.text('@' + tweet.user + ': ' + tweet.message);
+        //   $tweet.appendTo($random);
+        //   index -= 1;
+        // }
+        // $random.appendTo($body);
+        update();
+        $('button').on('click', function() {
+          $('#random').remove();
+          update();
+          return false;
+        });
+
+        function listener() {
+          $('.random').on('click', function() {
+            var dis = $(this);
+            // window.console.log(streams.home.filter(function(tweet) {
+            //   return tweet.user === $(this).data("user");
+            // }));
+            var filtered_array = streams.home.filter(function(tweet) {
+              return tweet.user === dis.data("user");
+            })
+            $('#random').remove();
+            update(filtered_array);
+          })
+        }
+        
+      });
+
+  
+
+    </script>
+  </body>
+</html>
